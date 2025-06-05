@@ -1,0 +1,16 @@
+# Ensure ImportExcel module is installed
+# Install-Module ImportExcel -Scope CurrentUser
+
+# Define output path
+$outputPath = "$env:USERPROFILE\Desktop\AD_Users.xlsx"
+
+# Get user objects from AD with useful properties
+$users = Get-ADUser -Filter * -Property Name, SamAccountName, DisplayName, EmailAddress, Enabled, Department, Title, LastLogonDate, PasswordLastSet
+
+# Convert results to a format suitable for Excel
+$userList = $users | Select-Object Name, SamAccountName, DisplayName, EmailAddress, Enabled, Department, Title, LastLogonDate, PasswordLastSet
+
+# Export to Excel
+$userList | Export-Excel -Path $outputPath -AutoSize -TableName "ADUsers"
+
+Write-Output "Excel file created at: $outputPath"
