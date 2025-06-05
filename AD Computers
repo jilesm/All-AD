@@ -1,0 +1,16 @@
+# Ensure you have the ImportExcel module installed
+# Install-Module ImportExcel -Scope CurrentUser
+
+# Define output path
+$outputPath = "$env:USERPROFILE\Desktop\AD_Computers.xlsx"
+
+# Get computer objects from AD
+$computers = Get-ADComputer -Filter * -Property Name, OperatingSystem, OperatingSystemVersion, Enabled, LastLogonDate, IPv4Address, DistinguishedName
+
+# Convert results to a format suitable for Excel
+$computerList = $computers | Select-Object Name, OperatingSystem, OperatingSystemVersion, Enabled, LastLogonDate, IPv4Address, DistinguishedName
+
+# Export to Excel
+$computerList | Export-Excel -Path $outputPath -AutoSize -TableName "ADComputers"
+
+Write-Output "Excel file created at: $outputPath"
